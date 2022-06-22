@@ -41,15 +41,15 @@
 			</div>
 			<div>
 				<label for="salt">Salt:</label>
-				<input type="text" id="salt" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="semi-secret"/>
+				<input type="text" id="salt" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="semi-secret" autocomplete="off"/>
 			</div>
 			<div>
 				<label for="prependdomain">Prepend domain to email</label>
-				<input type="checkbox" id="prependdomain" name="prependdomain"/>
+				<input type="checkbox" id="prependdomain" name="prependdomain" autocomplete="off"/>
 			</div>
 			<div>
 				<label for="omitextension">Omit extension when prepending domain</label>
-				<input type="checkbox" id="omitextension" name="omitextension"/>
+				<input type="checkbox" id="omitextension" name="omitextension" autocomplete="off"/>
 			</div>
 			<br>
 			<br>
@@ -197,10 +197,10 @@ print(res.hexdigest()[0:8] + "@" + mydomain)
 			salt.value = s;
 		};
 		if (pd) {
-			prependdomain.checked = pd;
+			prependdomain.checked = JSON.parse(pd);
 		};
 		if (oe) {
-			omitextension.checked = oe;
+			omitextension.checked = JSON.parse(oe);
 		};
 		genEmail(); // call once
 		// Domain name
