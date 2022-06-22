@@ -1,0 +1,113 @@
+body {
+	background-color: #fffef9;
+	font-size: 18px;
+	padding-left: 0.5em;
+}
+
+h1 {
+	margin-top: 1em;
+	line-height: 1.1;
+}
+
+input {
+	margin-left: 1em;
+}
+
+input.email:focus {
+	outline: none;
+}
+
+.centered {
+	text-align: center;
+}
+
+.spacer {
+	margin-bottom: 12em;
+}
+
+code {
+	font-size: 16px;
+	color: #4d4d4d;
+	background-color: inherit;
+}
+
+.email {
+	font-size: 22px;
+	line-height: 2;
+	font-weight: bold;
+	width: 80%;
+	margin-bottom: 4em;
+	text-align: center;
+}
+
+.output {
+	text-align: center;
+}
+
+.input {
+	text-align: center;
+	font-size: 18px;
+}
+
+.footer a {
+	color: inherit;
+}
+
+a:visited {
+	color: inherit
+}
+
+a:hover {
+	color: #4d4d4d;
+}
+
+.footer:before{
+	display: inline-block;
+	padding-top: 1em;
+	content:url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1002.34 668.23"><g id="Layer_2" data-name="Layer 2"><g id="mark"><path d="M918.15,0H735.05a66.82,66.82,0,0,0-66.82,66.82,66.82,66.82,0,0,1-66.83,66.82H400.94a66.83,66.83,0,0,0-66.83,66.83h0a66.83,66.83,0,0,0,66.83,66.82H601.4a66.83,66.83,0,0,1,66.83,66.82h0a66.83,66.83,0,0,1-66.83,66.83H469.11c-69.32,0-109.28,79.34-67.45,134.62,62.67,82.81,163,135.5,275.56,132.55,178.9-4.7,325.12-159.64,325.12-338.6V84.19A84.19,84.19,0,0,0,918.15,0Z"/><path d="M66.82,133.64H267.29A66.82,66.82,0,0,0,267.29,0H66.82a66.82,66.82,0,0,0,0,133.64Z"/><path d="M133.65,534.58H66.82A66.82,66.82,0,0,0,0,601.4H0a66.83,66.83,0,0,0,66.82,66.83h66.83a66.83,66.83,0,0,0,66.82-66.83h0A66.82,66.82,0,0,0,133.65,534.58Z"/><path d="M334.11,332.49a65.2,65.2,0,0,0-65.19-65.2H66.82A66.82,66.82,0,0,0,0,334.11H0a66.83,66.83,0,0,0,66.82,66.83H268.93c36.38,0,65.26-29.76,65.18-66.14v-2.31Z"/></g></g></svg>');
+	background-size: 3em 3em;
+	height: 3em;
+	width: 3em;
+}
+
+.footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: #f7efee;
+	text-align: center;
+}
+
+.tabs {
+	list-style: none;
+}
+
+.tabs li {
+	display: inline;
+}
+
+.tabs li a {
+	color: inherit;
+	padding: 0.5em 0.5em;
+}
+
+.additional-implementations {
+	display: inline;
+}
+
+.langs {
+	padding: 3em;
+	position: relative;
+	background-color: inherit;
+	border: 2px solid #ccc;
+	margin-bottom: 12em;
+}
+
+.lang:not(:target) {
+	display: none;
+}
+
+.lang:target {
+	z-index: -1;
+}

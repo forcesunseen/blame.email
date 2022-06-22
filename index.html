@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+	<!-- Created by Matt Hamilton at Forces Unseen. I stand on the shoulders of giants. -->
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+		<meta name="description" content="client-side one-way email generator">
+		<meta name="keywords" content="email">
+		<meta name="author" content="Forces Unseen">
+		<meta name="application-name" content="blame.email">
+		<link rel="apple-touch-icon" sizes="180x180" href="fu-180x180.png">
+		<link rel="shortcut icon" type="image/png" href="favicon.png"></link>
+		<link rel="stylesheet" type="text/css" href="index.css"></link>
+		<title>blame.email</title>
+		<script src="md5.js"></script>
+	</head>
+	<body>
+		<h1>blame.email - client-side one-way email generator</h1>
+		<p>
+			What is this? Check out our blog post <a href="https://blog.forcesunseen.com/email-blame" target="_blank">here</a>.
+			<br>
+			<br>
+			<b>tl;dr:</b> using a catch-all email inbox (or <a href="https://news.ycombinator.com/item?id=31827395" target="_blank">more complex mail filters</a>), this page generates per-domain one-way email addresses client-side in the browser. No information is transmitted from your local browser.
+			<br>
+			<br>
+			Blame email is a project by <a href="https://www.forcesunseen.com" target="_blank">Forces Unseen</a>.
+			<br>
+			<br>
+		</p>
+		<p class="centered">
+			<code id="formula"></code>
+		</p>
+
+		<div class="output">
+			<input type="text" class="email" id="email" value="(placeholder; fill out form below!)" readonly="true" onclick="this.setSelectionRange(0,this.value.length);this.select();" autocomplete="off"/>
+		</div>
+		<div class="input">
+			<div>
+				<label for="domain">Domain:</label>
+				<input type="text" id="domain" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="domain.example"/ autofocus>
+			</div>
+			<div>
+				<label for="salt">Salt:</label>
+				<input type="text" id="salt" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="semi-secret"/>
+			</div>
+			<div>
+				<label for="prependdomain">Prepend domain to email</label>
+				<input type="checkbox" id="prependdomain" name="prependdomain"/>
+			</div>
+			<div>
+				<label for="omitextension">Omit extension when prepending domain</label>
+				<input type="checkbox" id="omitextension" name="omitextension"/>
+			</div>
+			<br>
+			<br>
+			<p>
+				Add your domain below and bookmark the page to easily generate new emails.
+			<br>
+				All operations are client-side; no information is sent to any server.
+			</p>
+			<div>
+				<label for="yourdomain">Your catchall domain:</label>
+				<input type="text" id="yourdomain" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="catchall.example"/>
+			</div>
+		</div>
+		<div class="spacer"></div>
+		<div class="additional-implementations">
+			<h2>Additional implementations</h2>
+			<ul class="tabs">
+				<li><a href="#shell">Shell</a></li>
+				<li><a href="#go">Go</a></li>
+				<li><a href="#python">Python</a></li>
+			</ul>
+			<div class="langs">
+				<div class="lang" id="shell">
+					<code class="impl-code">
+						<pre>
+email() {
+  globalsalt='abc'
+  domain='mydomain.example'
+  echo -n $(echo -n ${1}+${globalsalt} | md5sum | cut -c1-8)@${domain}
+}
+						</pre>
+					</code>
+
+					<code class="impl-code">
+						<pre>
+$ email amazon.com
+
+868e940d@mydomain.example
+						</pre>
+					</code>
+
+				</div>
+				<div class="lang" id="go">
+					<code class="impl-code">
+						<pre>
+package main
+
+import (
+	"crypto/md5"
+	"fmt"
+	"log"
+	"os"
+)
+
+const (
+	salt     string = "abc"
+	myDomain string = "mydomain.example"
+)
+
+func main() {
+	if len(os.Args) != 2 {
+		log.Fatal("you must provide exactly one domain as argument")
+	}
+	domain := os.Args[1]
+	sum := fmt.Sprintf("%x", md5.Sum([]byte(domain+"+"+salt)))
+	log.Println(sum[0:8] + "@" + myDomain)
+}
+						</pre>
+					</code>
+				</div>
+				<div class="lang" id="python">
+					<code class="impl-code">
+						<pre>
+import sys
+import hashlib
+
+domain = sys.argv[1]
+salt = "abc"
+mydomain = "mydomain.example"
+
+s = domain + "+" + salt
+res = hashlib.md5(s.encode())
+print(res.hexdigest()[0:8] + "@" + mydomain)
+						</pre>
+					</code class="impl-code">
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<p>A project by <a href="https://www.forcesunseen.com/" target="_blank">Forces Unseen</a></p>
+		</div>
+	</body>
+	<script>
+		{
+		let formula = document.getElementById("formula");
+		let email = document.getElementById("email");
+		let domain = document.getElementById("domain");
+		let salt = document.getElementById("salt");
+		let yourdomain = document.getElementById("yourdomain");
+		let prependdomain = document.getElementById("prependdomain");
+		let omitextension = document.getElementById("omitextension");
+		function genEmail() {
+			formula.textContent = 'md5(domain.example + "+" + salt)[0:8] + "@your.domain"';
+			if (prependdomain.checked) {
+				formula.textContent = '"domain.example-" + md5(domain.example + "+" + salt)[0:8] + "@your.domain"';
+				if (omitextension.checked) {
+					formula.textContent = '"domain-" + md5(domain.example + "+" + salt)[0:8] + "@your.domain"';
+				};
+			};
+			if (!domain.value) {
+				return "(placeholder; fill out form below!)"
+			};
+			let yd = "catchall.example";
+			if (yourdomain.value) {
+				yd = yourdomain.value;
+			};
+			let hash = md5(domain.value+"+"+salt.value);
+			let addr = hash.slice(0,8)+"@"+yd;
+			let d = domain.value;
+			if (omitextension.checked) {
+				if (d.split(".").length > 1) {
+					d = d.split(".").slice(0,-1).join(".");
+				};
+			};
+			if (prependdomain.checked) {
+				addr = d+"-"+addr;
+			};
+			return addr;
+		};
+		// get prefs
+		let yd = localStorage.getItem("yourdomain");
+		let s = localStorage.getItem("salt");
+		let pd = localStorage.getItem("prependdomain");
+		let oe = localStorage.getItem("omitextension");
+		function savePrefs() {
+			localStorage.setItem("yourdomain", yourdomain.value);
+			localStorage.setItem("salt", salt.value);
+			localStorage.setItem("prependdomain", prependdomain.checked);
+			localStorage.setItem("omitextension", omitextension.checked);
+		};
+		if (yd) {
+			yourdomain.value = yd;
+		};
+		if (s) {
+			salt.value = s;
+		};
+		if (pd) {
+			prependdomain.checked = pd;
+		};
+		if (oe) {
+			omitextension.checked = oe;
+		};
+		genEmail(); // call once
+		// Domain name
+		domain.addEventListener("input", (event) => {
+			email.value = genEmail();
+		});
+		// Salt
+		salt.addEventListener("input", (event) => {
+			savePrefs();
+			email.value = genEmail();
+		});
+		// Prepend domain name checkbox
+		prependdomain.addEventListener("input", (event) => {
+			savePrefs();
+			email.value = genEmail();
+		});
+		// Omit extension checkbox
+		omitextension.addEventListener("input", (event) => {
+			savePrefs();
+			email.value = genEmail();
+		});
+		// Catch-all domain
+		yourdomain.addEventListener("input", (event) => {
+			savePrefs();
+			email.value = genEmail();
+		});
+		}
+	</script>
+</html>
